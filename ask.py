@@ -2,9 +2,7 @@ from fake_useragent import UserAgent
 import requests
 import json
 
-ua = UserAgent()
-
-def main(request):
+def handler(request):
     if request.method != "POST":
         return {
             "statusCode": 405,
@@ -12,8 +10,9 @@ def main(request):
         }
 
     try:
-        data = request.json
-        mess = data.get('message', '')
+        body = request.body.decode()  # request.body is raw bytes
+        data = json.loads(body)
+        mess = data.get("message", "")
 
         headers = {
             'authority': 'www.blackbox.ai',
